@@ -48,3 +48,29 @@ stages:
       inputs:
         PathtoPublish: '$(Build.ArtifactStagingDirectory)'
         ArtifactName: 'drop'
+    - task: PublishBuildArtifacts@1
+      inputs:
+        PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+        ArtifactName: 'drop'
+        publishLocation: 'Container'
+
+- stage: 'Deploy'
+  jobs:
+  - job: Deploy
+    pool:
+      vmImage: 'windows-latest'
+
+    steps:
+      - task: DownloadBuildArtifacts@0
+        inputs:
+          buildType: 'current'
+          downloadType: 'single'
+          artifactName: 'drop'
+          downloadPath: '$(System.ArtifactsDirectory)'
+      - task: AzureRmWebAppDeployment@4
+        inputs:
+          ConnectionType: 'AzureRM'
+          azureSubscription: 'Free Trial(41a48233-5fd3-47bd-b3f3-4414f7f86fa5)'
+          appType: 'webApp'
+          WebAppName: 'WebAppSQLTobby'
+          packageForLinux: '$(System.ArtifactsDirectory)/drop/*.zip'
