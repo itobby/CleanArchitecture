@@ -11,6 +11,7 @@ pool:
 
 variables:
   buildConfiguration: 'Release'
+  buildPlatform: 'Any CPU'
 
 steps:
 - task: UseDotNet@2
@@ -30,6 +31,7 @@ steps:
     arguments: '--configuration $(buildConfiguration) --collect "Code coverage"'
 - task: DotNetCoreCLI@2
   displayName: "Publish"
+  enabled: false
   inputs:
     command: 'publish'
     publishWebProjects: true
@@ -41,7 +43,3 @@ steps:
   inputs:
     PathtoPublish: '$(Build.ArtifactStagingDirectory)'
     ArtifactName: 'drop'
-
-- download: current
-  artifact: drop
-  enabled: false
