@@ -7,44 +7,44 @@ trigger:
 - master
 
 stages:
-- stage: Build
+- stage: 'Build'
   jobs:
-  - job: Build
+  - job: build
 
-  pool:
-    vmImage: 'windows-latest'
+    pool:
+      vmImage: 'windows-latest'
 
-  variables:
-    buildConfiguration: 'Release'
-    buildPlatform: 'Any CPU'
+    variables:
+      buildConfiguration: 'Release'
+      buildPlatform: 'Any CPU'
 
-  steps:
-  - task: UseDotNet@2
-    displayName: "Build .NET Core"
-    inputs:
-      packageType: 'sdk'
-      version: '3.1.x'
-  - script: dotnet build --configuration $(buildConfiguration)
-    displayName: 'dotnet build $(buildConfiguration)'
-  - task: DotNetCoreCLI@2
-    displayName: "Run tests"
-    enabled: true
-    continueOnError: true
-    inputs:
-      command: 'test'
-      projects: '**/*Tests/*.csproj'
-      arguments: '--configuration $(buildConfiguration) --collect "Code coverage"'
-  - task: DotNetCoreCLI@2
-    displayName: "Publish"
-    enabled: false
-    inputs:
-      command: 'publish'
-      publishWebProjects: true
-      arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
-      zipAfterPublish: true
+    steps:
+    - task: UseDotNet@2
+      displayName: "Build .NET Core"
+      inputs:
+        packageType: 'sdk'
+        version: '3.1.x'
+    - script: dotnet build --configuration $(buildConfiguration)
+      displayName: 'dotnet build $(buildConfiguration)'
+    - task: DotNetCoreCLI@2
+      displayName: "Run tests"
+      enabled: true
+      continueOnError: true
+      inputs:
+        command: 'test'
+        projects: '**/*Tests/*.csproj'
+        arguments: '--configuration $(buildConfiguration) --collect "Code coverage"'
+    - task: DotNetCoreCLI@2
+      displayName: "Publish"
+      enabled: false
+      inputs:
+        command: 'publish'
+        publishWebProjects: true
+        arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+        zipAfterPublish: true
 
-  - task: PublishBuildArtifacts@1
-    displayName: "Publish Artifacts"
-    inputs:
-      PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-      ArtifactName: 'drop'
+    - task: PublishBuildArtifacts@1
+      displayName: "Upload Artifacts"
+      inputs:
+        PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+        ArtifactName: 'drop'
