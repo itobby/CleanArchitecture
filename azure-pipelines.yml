@@ -20,7 +20,6 @@ stages:
 
     steps:
     - task: UseDotNet@2
-      displayName: "Build .NET Core"
       inputs:
         packageType: 'sdk'
         version: '3.1.x'
@@ -28,6 +27,7 @@ stages:
       displayName: 'dotnet build $(buildConfiguration)'
 
     - task: DotNetCoreCLI@2
+      displayName: 'run $(buildConfiguration) test'
       continueOnError: true
       inputs:
         command: 'test'
@@ -35,12 +35,14 @@ stages:
         arguments: '--configuration $(buildConfiguration) --collect "Code coverage"'
 
     - task: DotNetCoreCLI@2
+      displayName: 'dotnet publish $(buildConfiguration)'
       inputs:
         command: 'publish'
         publishWebProjects: false
         projects: 'Src/WebUI/WebUI.csproj'
         arguments: '--self-contained --runtime win-x86 --configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
         zipAfterPublish: true
+
     - task: PublishBuildArtifacts@1
       inputs:
         PathtoPublish: '$(Build.ArtifactStagingDirectory)'
