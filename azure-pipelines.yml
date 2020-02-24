@@ -28,7 +28,6 @@ stages:
       displayName: 'dotnet build $(buildConfiguration)'
 
     - task: DotNetCoreCLI@2
-      displayName: "Run tests"
       continueOnError: true
       inputs:
         command: 'test'
@@ -36,7 +35,6 @@ stages:
         arguments: '--configuration $(buildConfiguration) --collect "Code coverage"'
 
     - task: DotNetCoreCLI@2
-      displayName: "Publish"
       inputs:
         command: 'publish'
         publishWebProjects: true
