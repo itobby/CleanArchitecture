@@ -28,7 +28,6 @@ stages:
       displayName: 'dotnet build $(buildConfiguration)'
     - task: DotNetCoreCLI@2
       displayName: "Run tests"
-      enabled: true
       continueOnError: true
       inputs:
         command: 'test'
@@ -36,7 +35,6 @@ stages:
         arguments: '--configuration $(buildConfiguration) --collect "Code coverage"'
     - task: DotNetCoreCLI@2
       displayName: "Publish"
-      enabled: false
       inputs:
         command: 'publish'
         publishWebProjects: true
@@ -46,7 +44,6 @@ stages:
       inputs:
         PathtoPublish: '$(Build.ArtifactStagingDirectory)'
         ArtifactName: 'drop'
-        publishLocation: 'Container'
 
 - stage: 'Deploy'
   jobs:
