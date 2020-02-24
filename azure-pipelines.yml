@@ -55,6 +55,7 @@ stages:
 
     steps:
       - task: DownloadBuildArtifacts@0
+        enabled: false
         inputs:
           buildType: 'current'
           downloadType: 'single'
@@ -66,6 +67,7 @@ stages:
             List published files
             dir /b /s
       - task: AzureRmWebAppDeployment@4
+        enabled: false
         inputs:
           ConnectionType: 'AzureRM'
           azureSubscription: 'Free Trial(41a48233-5fd3-47bd-b3f3-4414f7f86fa5)'
