@@ -26,6 +26,7 @@ stages:
         version: '3.1.x'
     - script: dotnet build --configuration $(buildConfiguration)
       displayName: 'dotnet build $(buildConfiguration)'
+
     - task: DotNetCoreCLI@2
       displayName: "Run tests"
       continueOnError: true
@@ -33,6 +34,7 @@ stages:
         command: 'test'
         projects: '**/*Tests/*.csproj'
         arguments: '--configuration $(buildConfiguration) --collect "Code coverage"'
+
     - task: DotNetCoreCLI@2
       displayName: "Publish"
       inputs:
@@ -58,6 +60,11 @@ stages:
           downloadType: 'single'
           artifactName: 'drop'
           downloadPath: '$(System.ArtifactsDirectory)'
+      - task: CmdLine@2
+        inputs:
+          script: |
+            List published files
+            dir /b /s
       - task: AzureRmWebAppDeployment@4
         inputs:
           ConnectionType: 'AzureRM'
