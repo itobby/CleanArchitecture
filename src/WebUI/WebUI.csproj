@@ -36,6 +36,8 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="GraphQL" Version="2.4.0" />
+    <PackageReference Include="graphiql" Version="1.2.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -50,6 +52,9 @@
     <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="GraphQL\" />
+  </ItemGroup>
   <Target Name="NSwag" AfterTargets="Build" Condition="'$(Configuration)' == 'Debug'">
     <Copy SourceFiles="@(Reference)" DestinationFolder="$(OutDir)References" />
     <Exec Command="$(NSwagExe_Core30) run /variables:Configuration=$(Configuration)" />

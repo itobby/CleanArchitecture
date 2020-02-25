@@ -6,6 +6,39 @@
     "version": "1.0.0"
   },
   "paths": {
+    "/graphql": {
+      "get": {
+        "tags": [
+          "GraphQL"
+        ],
+        "operationId": "GraphQL_Post",
+        "requestBody": {
+          "x-name": "query",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GraphQLQuery"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/TodoItems": {
       "post": {
         "tags": [
@@ -388,6 +421,27 @@
   },
   "components": {
     "schemas": {
+      "GraphQLQuery": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "operationName": {
+            "type": "string",
+            "nullable": true
+          },
+          "namedQuery": {
+            "type": "string",
+            "nullable": true
+          },
+          "query": {
+            "type": "string",
+            "nullable": true
+          },
+          "variables": {
+            "nullable": true
+          }
+        }
+      },
       "CreateTodoItemCommand": {
         "type": "object",
         "additionalProperties": false,
